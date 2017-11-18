@@ -106,7 +106,7 @@ fi
 ###FimSubmenu##
 sleep 1s
 cd /root/
-wget -O manager.zip wget -O manager https://github.com/wellingtal/Meu-script/blob/master/admmanager.zip -o /dev/nul
+wget -O manager.zip wget -O manager https://github.com/wellingtal/Meu-script/blob/master/admmanager.zip?raw=true -o /dev/nul
 sleep 1s
 echo  -e "\033[1;32m"
 echo -e "\033[1;31mO GERENCIADOR ADM QUE VOCE ESTA USANDO E...
