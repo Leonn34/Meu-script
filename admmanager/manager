@@ -1,0 +1,9 @@
+#!/bin/bash
+if [ "$1" = "" ]; then
+adm
+else
+echo -e ""
+adm $1
+echo -e ""
+fi
+exit

@@ -1,0 +1,214 @@
+#!/bin/bash
+
+if [ $(id -u) -eq 0 ]; then
+clear
+ else
+ if echo $(id) |grep sudo > /dev/null
+then
+clear
+echo "Voce não é root"
+echo "Seu usuario esta no grupo sudo"
+echo -e "Para virar root execute \033[1;31msudo su\033[0m"
+exit
+else
+clear
+echo -e ""
+exit
+	fi
+fi
+
+clear
+if [ "$1" = "" ]; then
+echo -e "\033[36;37mADM MANAGER EDIÇAO E INSTALAÇAO!\033[0m" 
+echo -e "\033[0;35m------------------------------------------------------------\033[0m"
+echo -e "\033[1;36m[\033[1;31m1\033[1;36m] ADICIONAR FIREWALL \033[1;30m(Regras iptables \033[1;31mNao erre o IP!\033[1;30m)\033[1;36m
+[\033[1;31m2\033[1;36m] REMOVER FIREWALL \033[1;30m(Retira todas as regras iptables)\033[1;36m
+[\033[1;31m3\033[1;36m] ATUALIZAR PACOTES \033[1;30m(Atualiza todos pacotes no sistema)\033[1;36m
+[\033[1;31m4\033[1;36m] ATUALIZAR SIST. OPERACIONAL \033[1;30m(Atualiza maquina \033[1;31mRiscos!!\033[1;30m)\033[1;36m
+[\033[1;31m5\033[1;36m] EDITAR SQUID \033[1;30m(Editar squid, cuidado!)\033[1;36m
+[\033[1;31m6\033[1;36m] EDITAR SSH \033[1;30m(edita ssh, cuidado! )\033[1;36m
+[\033[1;31m7\033[1;36m] EDITAR QUALQUER SCRIPT NA BIN \033[1;30m(saiba o nome)\033[1;36m
+[\033[1;31m8\033[1;36m] EDITAR PAYLOADS \033[1;30m(edita payloads)\033[1;36m
+[\033[1;31m9\033[1;36m] REINICIAR VPS \033[1;30m(reinicia a vps)\033[1;36m
+[\033[1;31m10\033[1;36m] REINICIAR SERVIÇOS VPS \033[1;30m(reinicia SSH/SQUID)\033[1;36m
+[\033[1;31m0\033[1;36m] VOLTAR \033[1;30m(Volta ao menu anterior)\\033[0m"
+echo -e "\033[0;35m------------------------------------------------------------\033[0m"
+echo -e "\033[1;36mQUAL E A SUA OPÇAO?\033[0m"
+read -p ": " opcao
+else
+opcao="$1"
+fi
+case $opcao in
+ 1)
+read -p "Digite o ip do vps: " ip
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+
+echo Configurando...
+sleep 1
+iptables -P INPUT DROP
+iptables -P OUTPUT DROP
+iptables -P FORWARD DROP
+
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -t filter -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+iptables -A OUTPUT -p tcp -d $ip --dport 443 -m state --state NEW -j ACCEPT
+iptables -A OUTPUT -p tcp -d $ip --dport 80 -m state --state NEW -j ACCEPT
+
+iptables -A OUTPUT -p tcp --dport 53 -m state --state NEW -j ACCEPT
+iptables -A OUTPUT -p udp --dport 53 -m state --state NEW -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 67 -m state --state NEW -j ACCEPT
+iptables -A OUTPUT -p udp --dport 67 -m state --state NEW -j ACCEPT
+
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p tcp --dport 8080 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 3128 -j ACCEPT
+iptables -A INPUT -p tcp --dport 8799 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 8080 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 3128 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 8799 -j ACCEPT
+iptables -A FORWARD -p tcp --dport 8080 -j ACCEPT
+iptables -A FORWARD -p tcp --dport 80 -j ACCEPT
+iptables -A FORWARD -p tcp --dport 3128 -j ACCEPT
+iptables -A FORWARD -p tcp --dport 8799 -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+
+iptables -A INPUT -p tcp --dport 10000 -j ACCEPT
+iptables -A OUTPUT -p tcp --dport 10000 -j ACCEPT
+
+echo -e "\033[1;36mFirewall moficicado
+Portas 443 22 8799 8080 80 3128
+Bloqueio ICMP
+Bloqueio Torrent
+Pequena proteçao DDoS
+
+CASO QUEIRA TIRAR ESSAS REGRAS IPTABLES EXECUTE A FERRAMENTA ResetFirewall\033[0m"
+  sleep 5s
+  adm3
+  exit
+;;
+ 2)
+iptables -F
+iptables -X
+iptables -t nat -F
+echo -e "\033[41;1;27mIPTABLES RESET NAT\033[0m"
+sleep 1s
+iptables -t nat -X
+iptables -t mangle -F
+echo -e "\033[41;1;27mIPTABLES RESET MANGLE\033[0m"
+iptables -t mangle -X
+echo -e "\033[41;1;27mIPTABLES FIREWALL RESETADO\033[0m"
+sleep 5s
+  adm3
+  exit
+;;
+ 3)
+echo -e "\033[1;36mA atualização irá atualiza a lista de pacotes do seu sistema e atualizar todos os seus pacotes instalados para suas versões mais recentes.\033[0m"
+  read -p "ENTER" enter
+  sleep 3s
+  apt-get update
+  apt-get dist-upgrade
+  apt-get update -y
+  apt-get upgrade -y
+  apt-get dist-upgrade -y
+  echo -e "\033[1;36m
+SISTEMA ESTA ATUALIZADO!
+  \033[0m"
+  sleep 3s
+  adm3
+  exit
+;;
+ 4)
+echo -e "\033[1;36m Isso irá atualizar seu SO para a versão mais recente, \033[1;31mse tiver nova versão. \033[1;36mNão prossiga se não souber o que está fazendo. A atualização pode demorar muito, seja paciente. Para continuar aperte\033[0m"
+read -p "ENTER" enter
+do-release-upgrade
+  sleep 3s
+  adm3
+  exit
+;;
+ 5)
+arquivo="/etc/squid/squid.conf"
+if [ ! -f "$arquivo" ]
+then
+ nano /etc/squid3/squid.conf
+ adm3
+ exit
+else
+ nano /etc/squid/squid.conf
+ adm3
+ exit
+fi
+exit
+;;
+ 6)
+  nano /etc/ssh/sshd_config
+  adm3
+  exit
+;;
+ 7)
+  read -p "Qual o nome do script?: " script
+  nano /bin/$script
+  sleep 2s
+  echo -e "Feito"
+  sleep 3s
+  adm3
+  exit
+;;
+ 8)
+  nano /etc/payloads
+  sleep 2s
+  adm3
+  exit
+;;
+ 9)
+  reboot
+  sleep 1s
+  reboot
+  exit
+;;
+ 10)
+service ssh restart
+clear
+if [[ -e /etc/squid/squid.conf ]]; then
+service squid restart
+else
+service squid3 restart
+fi
+clear
+if [[ -e /etc/default/dropbear ]]; then
+service dropbear restart
+fi
+clear
+if [[ -e /etc/openvpn/server.conf ]]; then
+service openvpn restart
+fi
+clear
+echo -e "\033[1;36mSERVICOS RECARREGADOS COM SUCESSO!\033[1;31m
+RETORNANDO AO PAINEL!\033[0m"
+  sleep 4s
+  adm3
+  exit
+;;
+ 0)
+  adm2
+  exit
+;;
+ *)
+  tput setaf 7 ; tput setab 4 ; tput bold ; printf '%44s%s%-20s\n' "OPÇÃO INVÁLIDA..." ; tput sgr0
+sleep 1
+exit
+;;
+esac
+exit

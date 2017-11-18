@@ -1,0 +1,33 @@
+#!/bin/bash
+clear
+
+# INTRODUÇÃO
+
+tput setaf 7 ; tput setab 4 ; tput bold ; printf '%48s%s%-20s\n' "FAILBAN SQUID PROTECTION     " ; tput sgr0
+tput setaf 2 ; tput bold ; echo ""
+echo "Este é o FAILBAN PROTECTION, criado unicamente para proteger seu  "
+echo "SQUID ,seu objetivo é analizar os LOGS DE ACESSO e bloquear toda e"
+echo "qualquer ação suspeita e com isso aumentar 70% sua segurança."
+echo "" ; tput sgr0
+tput setaf 7 ; tput setab 4 ; tput bold ; printf '%48s%s%-20s\n' ; tput sgr0
+echo
+read -p "               Deseja continuar? [S/N]: " -e -i s resposta
+if [[ "$resposta" = 's' ]]; then
+touch ips.sh
+awk -F"|" '/TCP_DENIED(_ABORTED)?/ {print $1}' /var/log/squid3/access.log|sort -n -t"|" -k2|uniq -c|awk '$1>=1 {printf "iptables -I INPUT -s %s -j DROP\n" ,$3}' >> ips.sh
+clear
+tput setaf 7 ; tput setab 4 ; tput bold ; printf '%48s%s%-20s\n' "Os seguintes IP's foram BLOQUEADOS:" ; tput sgr0
+echo
+awk -F"|" '/TCP_DENIED(_ABORTED)?/ {print $1}' /var/log/squid3/access.log|sort -n -t"|" -k2|uniq -c|awk '$1>=1 {printf "%s \n" ,$3}'
+bash ips.sh
+echo
+echo > ips.sh
+echo >/var/log/squid3/access.log
+sleep 10
+else
+clear 
+tput setaf 7 ; tput setab 1 ; tput bold ; echo "Operação cancelada pelo usuário..." ; tput sgr0
+sleep 3
+clear
+exit
+fi

@@ -1,0 +1,35 @@
+#!/bin/bash
+payload="/bin/linkextractor"
+echo -e "\033[1;31m"
+echo -e "REMOVER HOST DA PESQUIZA DE SUBDOMINIOS"
+if [ ! -f "$payload" ]
+then
+echo -e "Arquivo $payload não encontrado"
+	exit 1
+else
+echo -e "hosts atuais no arquivo"
+echo -e "-------------------------------\033[1;36m"
+cat $payload
+echo -e "\033[1;31m-------------------------------"
+read -p "Digite o host que deseja remover da lista: " host
+	if [[ -z $host ]]
+ then
+echo -e "Você digitou um host vazio ou não existente!"
+exit 1
+ else
+    if [[ `grep -c "^$host" $payload` -ne 1 ]]
+ then
+echo -e "O domínio $host não foi encontrado no arquivo $payload" 
+exit 1
+ else
+grep -v "^$host" $payload > /tmp/a && mv /tmp/a $payload
+echo -e "-------------------------------\033[1;36m"
+cat $payload
+echo -e "\033[1;31m-------------------------------"
+echo -e "REMOVIDO COM SUCESSO!!!"
+echo -e "\033[0m"
+sleep 2s
+			exit 1
+		fi
+	fi
+fi

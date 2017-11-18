@@ -1,0 +1,531 @@
+#!/bin/bash
+fim="\033[0m"
+preto="\033[0;30m"
+vermelho="\033[0;31m"
+verde="\033[0;32m"
+amarelo="\033[0;33m"
+azul="\033[0;34m"
+purple="\033[0;35m"
+cyan="\033[0;36m"
+cinzaa="\033[0;37m"
+pretoCinza="\033[1;30m"
+vermelhoo="\033[1;31m"
+verdee="\033[1;32m"
+amareloo="\033[1;33m"
+azull="\033[4;34m"
+rosa="\033[1;35m"
+cyann="\033[2;36m"
+branco="\033[1;37m"
+cyann="\033[2;36m"
+if [ $(id -u) -eq 0 ]
+then
+	clear
+else
+	if echo $(id) |grep sudo > /dev/null
+	then
+	clear
+	echo "Voce não é root"
+	echo "Seu usuario esta no grupo sudo"
+	echo -e "Para virar root execute \033[1;31msudo su\033[0m"
+	exit
+	else
+	clear
+	echo -e "Vc nao esta como usuario root, nem com seus direitos (sudo)\nPara virar root execute \033[1;31msu\033[0m e digite sua senha root"
+	exit
+	fi
+fi
+files9 () {
+arq="/bin/$1"
+arq2="/root/adm/$1"
+equal=$(diff -q $arq $arq2)
+if [ "$equal" = "" ]; then
+rm -rf $arq2
+else
+mv -f $arq2 $arq
+chmod 777 $arq
+echo "1" >> /tmp/files
+echo "$1" >> /tmp/files2
+fi
+}
+cp /etc/ssh/sshd_config /etc/ssh/sshbak
+if [[ -e /bin/instalacao1 ]]; then
+opcao="1"
+else
+ if [[ -e /bin/instalacao2 ]]; then
+opcao="1"
+else
+  if [[ -e /bin/instalacao3 ]]; then
+opcao="1"
+else
+   if [[ -e /bin/instalacao4 ]]; then
+opcao="1"
+else
+clear
+opcao="2"
+clear
+   fi
+  fi
+ fi
+fi
+####DETECTADO####
+if [ "$opcao" = "1" ]
+then
+######SCRIPTOPÇAO1####
+###INICIOSubMenu##
+if [[ -e /bin/instalacao1 ]]; then
+systema="1"
+echo -e "\033[1;31mATUALIZACAO ADM OPENSSH\033[0m"
+echo -e ""
+sleep 1s
+ger="ADM OPENSSH E SQUID3"
+else
+ if [[ -e /bin/instalacao2 ]]; then
+systema="2" 
+echo -e "\033[1;31mATUALIZAÇAO ADM DROPBEAR\033[0m"
+echo -e ""
+ger="DROPBEAR COM OU SEM SQUID3"
+sleep 1s
+else
+  if [[ -e /bin/instalacao3 ]]; then
+systema="3"
+echo -e "\033[1;31m\033[0m"
+echo -e ""
+ger=""
+sleep 1s
+else
+   if [[ -e /bin/instalacao4 ]]; then
+systema="4"
+echo -e "\033[1;31mATUALIZAÇAO ADM OPENSSH PH V2\033[0m"
+echo -e ""
+ger="VPS MANAGER V2 SSH E SQUID"
+sleep 1s
+   fi
+  fi
+ fi
+fi
+###FimSubmenu##
+sleep 1s
+cd /root/
+wget -O manager.zip wget -O manager https://github.com/wellingtal/Meu-script/blob/master/admmanager.zip -o /dev/nul
+sleep 1s
+echo  -e "\033[1;32m"
+echo -e "\033[1;31mO GERENCIADOR ADM QUE VOCE ESTA USANDO E...
+\033[1;36m
+$ger
+\033[1;31m"
+sleep 5s
+echo -e "\033[1;36mFAZENDO A ANALISE DE TODOS ARQUIVOS DA INSTALACAO!...\033[0m"
+echo -e "\033[0m"
+case $systema in
+ 1)
+cd /root/
+echo -e "ANALISANDO!..."
+echo  -e "\033[1;32m"
+unzip /root/manager
+mv -f /root/admmanager/adm1.zip /root/
+rm -rf /root/admmanager/adm2.zip
+rm -rf /root/admmanager/adm3.zip
+rm -rf /root/admmanager/adm4.zip
+unzip /root/adm1
+rm -rf /root/adm1.zip
+mv -f /root/admmanager/* /root/adm1/
+touch /bin/instalacao1
+rm -rf /root/admmanager*
+rm -rf /root/manager*
+
+#instalando#
+mv /root/adm1 /root/adm
+touch /tmp/files
+touch /tmp/files2
+for att in `ls /root/adm/`
+do
+files9 $att
+done
+echo  -e "\033[0m"
+abc=$(cat /tmp/files |wc -l)
+abc2=$(cat /tmp/files2)
+if [ "$abc" = "0" ]; then
+echo -e "\033[1;31mNAO HA ATUALIZACOES DISPONIVEIS PARA SEU GERENCIADOR  ADM!\033[0m"
+rm -rf /tmp/files
+rm -rf /tmp/files2
+rm -rf /root/adm*
+sleep 5s
+exit
+fi
+;;
+ 2)
+cd /root/
+echo -e "CONFIGURANDO"
+echo  -e "\033[1;32m"
+unzip /root/manager
+mv -f /root/admmanager/adm2.zip /root/
+rm -rf /root/admmanager/adm1.zip
+rm -rf /root/admmanager/adm3.zip
+rm -rf /root/admmanager/adm4.zip
+unzip /root/adm2
+rm -rf /root/adm2.zip
+mv -f /root/admmanager/* /root/adm2/
+touch /bin/instalacao2
+rm -rf /root/admmanager*
+rm -rf /root/manager*
+
+#instalando#
+mv /root/adm2 /root/adm
+touch /tmp/files
+touch /tmp/files2
+for att in `ls /root/adm/`
+do
+files9 $att
+done
+echo  -e "\033[0m"
+abc=$(cat /tmp/files |wc -l)
+abc2=$(cat /tmp/files2)
+if [ "$abc" = "0" ]; then
+echo -e "\033[1;31mNAO HA ATUALIZACOES DISPONIVEIS PARA SEU GERENCIADOR  ADM!\033[0m"
+rm -rf /tmp/files
+rm -rf /tmp/files2
+rm -rf /root/adm*
+sleep 5s
+exit
+fi
+;;
+ 3)
+cd /root/
+echo -e "CONFIGURANDO"
+echo  -e "\033[1;32m"
+unzip /root/manager
+mv -f /root/admmanager/adm3.zip /root/
+rm -rf /root/admmanager/adm1.zip
+rm -rf /root/admmanager/adm2.zip
+rm -rf /root/admmanager/adm4.zip
+unzip /root/adm3
+rm -rf /root/adm3.zip
+mv -f /root/admmanager/* /root/adm3/
+touch /bin/instalacao3
+rm -rf /root/admmanager*
+rm -rf /root/manager*
+
+#instalando#
+mv /root/adm3 /root/adm
+touch /tmp/files
+touch /tmp/files2
+for att in `ls /root/adm/`
+do
+files9 $att
+done
+echo  -e "\033[0m"
+abc=$(cat /tmp/files |wc -l)
+abc2=$(cat /tmp/files2)
+if [ "$abc" = "0" ]; then
+echo -e "\033[1;31mNAO HA ATUALIZACOES DISPONIVEIS PARA SEU GERENCIADOR  ADM!\033[0m"
+rm -rf /tmp/files
+rm -rf /tmp/files2
+rm -rf /root/adm*
+sleep 5s
+exit
+fi
+;;
+ 4)
+cd /root/
+echo -e "CONFIGURANDO"
+echo  -e "\033[1;32m"
+unzip /root/manager
+mv -f /root/admmanager/adm4.zip /root/
+rm -rf /root/admmanager/adm2.zip
+rm -rf /root/admmanager/adm3.zip
+rm -rf /root/admmanager/adm1.zip
+unzip /root/adm4
+rm -rf /root/adm4.zip
+mv -f /root/admmanager/* /root/adm4/
+touch /bin/instalacao4
+rm -rf /root/admmanager*
+rm -rf /root/manager*
+
+#instalando#
+mv /root/adm4 /root/adm
+touch /tmp/files
+touch /tmp/files2
+for att in `ls /root/adm/`
+do
+files9 $att
+done
+echo  -e "\033[0m"
+abc=$(cat /tmp/files |wc -l)
+abc2=$(cat /tmp/files2)
+if [ "$abc" = "0" ]; then
+echo -e "\033[1;31mNAO HA ATUALIZACOES DISPONIVEIS PARA SEU GERENCIADOR  ADM!\033[0m"
+rm -rf /tmp/files
+rm -rf /tmp/files2
+rm -rf /root/adm*
+sleep 5s
+exit
+fi
+;;
+ *)
+tput setaf 7 ; tput setab 4 ; tput bold ; printf '%48s%s%-20s\n' "OPÇÃO INVÁLIDA..." ; tput sgr0
+sleep 3s
+clear
+;;
+esac
+echo -e "\033[1;33mPREPARANDO ARQUIVOS!\033[7;41m"
+echo -e "\033[7;31m"
+for prog in $(seq 18);
+do
+echo -n "||"
+sleep 0.2s
+done
+echo -e "\033[0m"
+echo -e "\033[1;33m[\033[1;31m100%\033[1;33m]
+FEITO!\033[0m"
+echo -e ""
+echo -e ""
+echo -e "\033[1;36mADM ATUALIZAR $abc ARQUIVOS\033[0m"
+echo -e ""
+echo -e "\033[1;31mA PREPARANDO ARQUIVOS...\033[0m"
+sleep 4s
+echo -e "\033[1;31m OK!!!\033[0m"
+sleep 1s
+echo -e "ESSES SAO OS ARQUIVOS ATUALIZADOS\033[1;36m
+
+$abc2
+\033[0m"
+sleep 5s
+rm -rf /tmp/files
+rm -rf /tmp/files2
+rm -rf /root/adm*
+echo -e ""
+sleep 4s
+notas
+######FIM#############
+exit
+fi
+if [ "$opcao" = "2" ]
+then
+echo -e ""
+######SCRIPTOPÇAO2####
+echo -e "\033[1;31m------------------------------------------------------------\033[0m"
+echo -e "\033[1;31m ESSE E O INSTALADOR ADM MANAGER PARA SUA VPS\033[0m"
+echo -e "\033[1;31m------------------------------------------------------------\033[0m"
+clear
+sleep 2s
+echo -e "\033[1;31mVOCE GOSTARIA DE UMA BREVE EXPLICAÇÃO SOBRE OS GERENCIADORES ADM?
+[ s/n ]"
+read -p "Opçao: " asd
+case $asd in
+(s|S)
+echo -e "\033[1;33m
+O GERENCIADOR (1) ADM\033[1;36m
+esse gerenciado ira funcionar da maneira tradicional como todos conhecem, ele vai instalar o squid, e abrira a porta 443 para o ssh, para uso com http injector como ssh e proxy
+ele, tem 2 maneiras de instalação,  a maneira de proxy seguro e proxy genérico, utilize oque melhor te agradar
+\033[1;33m
+O GERENCIADOR (2) ADM\033[1;36m
+esse gerenciador ira funcionar apenas como ssh,
+ou seja ele não ira utilizar a vps como proxy squid... a segurança da vps sera otimizada, porem este método não funciona no http injector apenas em apps que criam conexão direta!
+\033[1;33m
+O GERENCIADOR (3) ADM\033[1;36m
+esse gerenciador e igual ao gerenciador 1, apenas e diferente sua interface, e a escrita de seus Codes....\033[0m"
+;;
+esac
+echo ""
+echo -e "\033[1;36m VOCE\033[1;31m ACEITA\033[1;36m INSTALAR O SISTEMA
+ADM MANAGER E SEUS SCRIPTS? \033[0m"
+echo -e "\033[1;31m[s/n]\033[0m"
+read -p ": " simnao
+case $simnao in
+  n)
+echo -e "\033[1;36mABORTANDO INSTALAÇAO\033[0m"
+sleep 5s
+exit;;
+  s)
+echo -e "\033[1;31mESCOLHA UMA OPÇAO!\033[0m"
+echo -e "\033[1;31m[1] INSTALAR ADM PROXY E SSH
+[2] INSTALAR ADM DROPBEAR C/S PROXY
+[3] INSTALAR VPSMANAGER PROXY E SSH PH
+[4] SAIR DA INSTALACAO\033[0m"
+read -p ": " opcao
+sleep 1s
+echo -e "\033[1;31mATENÇAO ESTA INSTALAÇAO PODE DEMORAR BASTANTE TEMPO E PODE PARECER QUE TRAVOU, TENHA PACIENCIA E ESPERE!\033[0m"
+case $opcao in
+ 1)
+  apt-get update -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mCOM ADM MANAGER VOCE ACOMPANHA OS USUARIOS CONECTADOS EM TEMPO REAL\033[0m"
+  sleep 3s
+  apt-get upgrade -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mVOCE PODE ELIMINAR USUARIOS COM A DATA EXPIRADA COM APENAS UM COMANDO\033[0m"
+  sleep 3s
+  echo -e "\033[1;36mAPOS USAR UM COMANDO NO PAINEL, AO INVES DE VOLTAR PARA RAIZ VOCE VOLTA PARA O PAINEL\033[0m"
+  sleep 3s
+  apt-get install yum -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mVOCE TEM DIVERSAS FERRAMENTAS A DISPOSIÇAO COMO SPEED TEST, LIMPEZA DE CACHE...\033[0m"
+  sleep 3s
+  apt-get install bc -y 1>/dev/null 2>/dev/null
+  apt-get install nload -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mPARA CRIAR, MODIFICAR OU ATE MESMO DELETAR UM USUARIO, OS USUARIOS SERAO LISTADOS AO EXECUTAR O COMANDO\033[0m"  
+  sleep 3s
+  apt-get install wget curl python python3 nano -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mUM PAINEL ATRATIVO E COLORIDO ACABA FACILITANDO A GESTAO DOS USUARIOS\033[0m"
+  sleep 3s
+  echo -e "\033[1;36mSEGUNDA ETAPA...\033[0m"
+  sleep 2s
+##InstaladorDEadmVARIAVEIS
+echo  -e "\033[1;32m"
+cp /bin/adm1.zip /root/
+unzip /root/adm1
+rm -rf /root/adm1.zip
+mv -f /root/adm1/* /bin/
+chmod 777 /bin/*
+rm -rf /bin/adm1.zip
+rm -rf /bin/adm2.zip
+rm -rf /bin/adm3.zip
+rm -rf /bin/adm4.zip
+echo  -e "\033[0m"
+##FINALIZADO
+echo -e "\033[1;36mTERCEIRA ETAPA\033[0m"
+sleep 3s
+  echo -e "\033[1;36mINICIANDO INSTALAÇAO DO SQUID3 EM...\033[0m"
+  sleep 1s
+  echo -e "\033[1;36m3\033[0m"
+  sleep 1s
+  echo -e "\033[1;36m2\033[0m"
+  sleep 1s
+  echo -e "\033[1;36m1\033[0m"
+  sleep 2s
+  SQUID3IS
+  sleep 2s
+  echo -e "\033[1;36mADM INSTALADO COM SUCESSO, SAINDO...\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m3\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m2\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m1\033[0m"
+  sleep 2s
+chmod 777 /bin/*
+  notas
+touch /bin/instalacao1
+  exit;;
+ 2)
+  apt-get update -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mCOM ADM MANAGER VOCE ACOMPANHA OS USUARIOS CONECTADOS EM TEMPO REAL\033[0m"
+  sleep 3s
+  apt-get upgrade -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mVOCE PODE ELIMINAR USUARIOS COM A DATA EXPIRADA COM APENAS UM COMANDO\033[0m"
+  sleep 3s
+  echo -e "\033[1;36mAPOS USAR UM COMANDO NO PAINEL, AO INVES DE VOLTAR PARA RAIZ VOCE VOLTA PARA O PAINEL\033[0m"
+  sleep 3s
+  apt-get install yum -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mVOCE TEM DIVERSAS FERRAMENTAS A DISPOSIÇAO COMO SPEED TEST, LIMPEZA DE CACHE...\033[0m"
+  sleep 3s
+  apt-get install bc -y 1>/dev/null 2>/dev/null
+  apt-get install nload -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mPARA CRIAR, MODIFICAR OU ATE MESMO DELETAR UM USUARIO, OS USUARIOS SERAO LISTADOS AO EXECUTAR O COMANDO\033[0m"  
+  sleep 3s
+  apt-get install wget curl python python3 nano -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mUM PAINEL ATRATIVO E COLORIDO ACABA FACILITANDO A GESTAO DOS USUARIOS\033[0m"
+##InstaladorDEadmVARIAVEIS
+echo  -e "\033[1;32m"
+cp /bin/adm2.zip /root/
+unzip /root/adm2
+rm -rf /root/adm2.zip
+mv -f /root/adm2/* /bin/
+chmod 777 /bin/*
+rm -rf /bin/adm1.zip
+rm -rf /bin/adm2.zip
+rm -rf /bin/adm3.zip
+rm -rf /bin/adm4.zip
+echo  -e "\033[0m"
+##FINALIZADO
+sleep 3s
+DROPBEAR
+  sleep 3s
+  echo -e "\033[1;36mFINALIZANDO INSTALAÇAO DO VPS MANAGER\033[0m"
+  sleep 2s
+echo -e "\033[1;36mPAINEL INSTALADO COM SUCESSO, SAINDO...\033[0m"
+  echo -e "\033[1;36m3...\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m2...\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m1...\033[0m"
+  sleep 2s
+  notas
+touch /bin/instalacao2
+  exit;;
+ 3)
+  apt-get update -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mESSE SCRIPT FUNCIONA COMO O GERENCIADOR DO PH, E SUA CONSTRUCAO FOI BASEADA NELE..N\033[0m"
+  sleep 3s
+  apt-get upgrade -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mVOCE PODE ELIMINAR USUARIOS COM A DATA EXPIRADA COM APENAS UM COMANDO\033[0m"
+  sleep 1s
+  sleep 2s
+  apt-get install yum -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mVOCE TEM DIVERSAS FERRAMENTAS A DISPOSIÇAO COMO SPEED TEST, LIMPEZA DE CACHE...\033[0m"
+  sleep 3s
+  apt-get install bc -y 1>/dev/null 2>/dev/null
+  apt-get install nload -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mPARA CRIAR, MODIFICAR OU ATE MESMO DELETAR UM USUARIO, OS USUARIOS SERAO LISTADOS AO EXECUTAR O COMANDO\033[0m"  
+  sleep 3s
+  apt-get install wget curl python python3 nano -y 1>/dev/null 2>/dev/null
+  echo -e "\033[1;36mUM PAINEL ATRATIVO E COLORIDO ACABA FACILITANDO A GESTAO DOS USUARIOS\033[0m"
+  sleep 3s
+  echo -e "\033[1;36mSEGUNDA ETAPA...\033[0m"
+##InstaladorDEadmVARIAVEIS
+echo  -e "\033[1;32m"
+cp /bin/adm4.zip /root/
+unzip /root/adm4
+rm -rf /root/adm4.zip
+mv -f /root/adm4/* /bin/
+chmod 777 /bin/*
+rm -rf /bin/adm1.zip
+rm -rf /bin/adm2.zip
+rm -rf /bin/adm3.zip
+rm -rf /bin/adm4.zip
+echo  -e "\033[0m"
+##FINALIZADO
+  sleep 2s
+echo -e "\033[1;36mTERCEIRA ETAPA\033[0m"
+sleep 3s
+  echo -e "\033[1;36mINICIANDO INSTALAÇAO DO SQUID3 EM...\033[0m"
+  sleep 1s
+  echo -e "\033[1;36m3\033[0m"
+  sleep 1s
+  echo -e "\033[1;36m2\033[0m"
+  sleep 1s
+  echo -e "\033[1;36m1\033[0m"
+  sleep 2s
+  SQUID3IS
+  sleep 2s
+  echo -e "\033[1;36mADM INSTALADO COM SUCESSO, SAINDO...\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m3\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m2\033[0m"
+  sleep 2s
+  echo -e "\033[1;36m1\033[0m"
+  sleep 2s
+chmod 777 /bin/*
+  notas
+touch /bin/instalacao4
+  exit;;
+  4)
+  exit;; 
+  *)
+echo -e "\033[1;36mOPÇAO NAO EXISTE!\033[0m"
+sleep 5s
+instalar
+exit
+;;
+esac
+exit;;
+ *)
+echo -e "\033[1;31mOPÇAO NAO EXISTE!\033[0m"
+sleep 5s
+instalar
+exit
+;;
+esac
+######FIM#############
+sleep 3s
+exit
+fi
+exit

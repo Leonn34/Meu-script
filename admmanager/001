@@ -1,0 +1,29 @@
+#!/bin/bash
+payload="/bin/linkextractor"
+echo -e "\033[1;31m"
+echo -e "Adicionar Host ao para pesquiza de subdominios" 
+if [ ! -f "$payload" ]
+then
+	echo -e "Arquivo $payload não encontrado"
+exit 1
+else
+echo "Domínios Para Pesquiza Atuais"
+echo -e "-------------------------------\033[1;36m"
+cat $payload
+echo -e "\033[1;31m-------------------------------"
+read -p "Digite o domínio que deseja adicionar a lista: " host
+	if [[ -z $host ]]
+	then
+echo -e "Você digitou um domínio vazio ou não existente!"
+exit 1
+	else
+echo "$host" >> $payload && grep -v "^$" $payload > /tmp/a && mv /tmp/a $payload
+echo -e "-------------------------------\033[1;36m"
+cat $payload
+echo -e "\033[1;31m-------------------------------"
+echo -e "ADICIONADO A LISTA COM SUCESSO\033[0m"
+exit 1
+			fi
+		fi
+	fi
+fi

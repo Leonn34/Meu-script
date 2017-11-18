@@ -1,0 +1,192 @@
+#!/bin/bash
+
+if [ $(id -u) -eq 0 ]; then
+clear
+ else
+ if echo $(id) |grep sudo > /dev/null
+then
+clear
+echo "Voce não é root"
+echo "Seu usuario esta no grupo sudo"
+echo -e "Para virar root execute \033[1;31msudo su\033[0m"
+exit
+else
+clear
+echo -e ""
+exit
+	fi
+fi
+
+if [ -d /etc/VpsPackdir ]
+then
+echo ""
+else
+mkdir /etc/VpsPackdir
+fi
+
+if [ -d /etc/VpsPackdir/senha ]
+then
+echo ""
+else
+mkdir /etc/VpsPackdir/senha
+fi
+
+if [ -d /etc/VpsPackdir/limite ]
+then
+echo ""
+else
+mkdir /etc/VpsPackdir/limite
+fi
+
+clear
+if [ "$1" = "" ]; then
+echo -e "\033[36;37m HOSTS © Painel de Administração \033[0m"
+echo -e "\033[1;33mPODEROSA FERRAMENTA PARA ENCONTRAR SUBDOMINIOS,
+VOCE PODE PEGAR O RESULTADO VIA SFTP DENTRO DA SUA PASTA ROOT, PARA UM MELHOR DESEMPEMHO ADICIONE NO MAXIMO 4 DOMINIOS. BOA SORTE\033[0m" 
+echo -e "\033[0;35m------------------------------------------------------------\033[0m"
+echo -e "\033[1;36m[\033[1;31m1\033[1;36m] PROCURAR SUBDOMINIOS \033[1;30m\033[1;36m
+[\033[1;31m2\033[1;36m] ADICIONAR HOST PARA PROCURAR SUBDOMINIOS \033[1;30m\033[1;36m
+[\033[1;31m3\033[1;36m] REMOVER UM HOST DA BUSCA DE SUBDOMINIOS\033[1;30m\033[1;36m
+[\033[1;31m4\033[1;36m] REMOVER TODOS HOST DA BUSCA DE SUBDOMINIOS\033[1;30m\033[1;36m
+[\033[1;31m5\033[1;36m] VERIFICAR HOST USANDO PROXY\033[1;30m\033[1;36m
+[\033[1;31m6\033[1;36m] VER RESULTADOS\033[1;30m\033[1;36m
+[\033[1;31m7\033[1;36m] CRIAR PAYLOADS\033[1;30m\033[1;36m
+[\033[1;31m0\033[1;36m] VOLTAR AO MENU ANTERIOR\033[1;30m\033[0m"
+echo -e "\033[0;35m------------------------------------------------------------\033[0m"
+echo -e "\033[1;36mQUAL E A SUA OPÇAO?\033[0m"
+read -p ": " opcao
+else 
+opcao="$1"
+fi
+case $opcao in
+ 1)
+echo -e "\033[1;36m"
+touch /root/ResultadosSubdominios.txt > /dev/null
+rm -rf /root/ResultadosSubdominios.txt > /dev/null
+EXTRAIRHOST /bin/linkextractor | tee ~/res > /dev/null
+cat /root/res |grep http |tee ~/ResultadosSubdominios.txt
+rm -rf /root/res
+read -p "ENTER PARA TERMINAR!! "
+sleep 2s
+echo -e "\033[0m"
+  adm4
+  exit;;
+ 2)
+  001
+  sleep 2s
+  adm4
+  exit;;
+ 3)
+  002
+  adm4
+  exit;;
+ 5)
+#
+echo -e "\033[1;36mVAI USAR OS DOMINOOS NA LISTA? 
+OU 
+VAI USAR UM DOMINIO MAE PARA TESTAR OS SEUS SEBDOMONIOS?\033[1;31m
+1-----LISTA
+2-----DOMINIO MAE\033[0m"
+read -p ": " hroxt
+case $hroxt in
+1)
+um="1"
+;;
+2)
+um="2"
+;;
+*)
+um="2"
+;;
+esac
+if [ "$um" = "2" ]; then
+echo -e "\033[1;36mDIGITE UM HOST VALIDO\033[0m"
+read -p "HOST: " phost
+touch /tmp/res > /dev/null
+touch /tmp/tempo > /dev/null
+touch /tmp/golp.txt > /dev/null
+echo "$phost" > /tmp/tempo
+EXTRAIRHOST /tmp/tempo |tee /tmp/res > /dev/null
+cat /tmp/res |grep http |tee /tmp/golp.txt > /dev/null
+rm -rf /tmp/tempo > /dev/null
+rm -rf /tmp/res > /dev/null
+tester=$(cat /tmp/golp.txt)
+hosts="/tmp/golp.txt"
+if [ "$tester" = "" ]; then
+echo -e "\033[1;36mHOST INVALIDO, USE O HOST PRINCIPAL DO DOMINIO QUE QUER FAZER A PESQUIZA\033[0m"
+sleep 6s
+adm4
+exit
+fi
+ else
+touch /tmp/golp.txt
+hosts="/bin/linkextractor"
+fi
+echo -e "\033[1;36mAGORA E NECESSARIO UM PROXY, DIGITE UM PROXY E PORTA\033[0m"
+ read -p "PROXY:PORTA " prox
+if [ "$prox" = "" ]; then
+ prox="fr-proxy1.serverip.co:80"  
+fi
+rm -rf /root/200.txt > /dev/null
+touch /root/200.txt > /dev/null
+testador $hosts $prox
+echo -e "\033[1;36mUM ARQUIVO 200.TXT FOI CRIADO COM O RESULTADO NA PASTA ROOT!\033[0m"
+rm -rf /tmp/golp.txt > /dev/null
+sleep 4s
+sleep 1s
+adm4
+  exit;;
+ 4)
+rm -rf /bin/linkextractor
+touch /bin/linkextractor
+echo -e "\033[1;36mLISTA DE HOSTS ZERADA!\033[0m"
+sleep 4s
+  adm4
+  exit;;
+ 6)
+echo -e "\033[1;36mRESULTADOS SUBDOMINIOS? OU DO TESTE COM PROXY?
+SUBDOMINIOS \033[1;31m||1||\033[1;36m
+TESTEPROXYS \033[1;31m||2||\033[0m"
+read -p "OPCAO: " rst
+if [ "$rst" = "1" ]
+then
+echo -e "\033[0m"
+echo -e "\033[1;36m"
+cat /root/ResultadosSubdominios.txt
+echo -e "\033[0m"
+read -p "ENTER P/ RETORNAR"
+adm4
+  exit
+else
+ if [ "$rst" = "2" ]
+then
+echo -e "\033[1;36m"
+cat /root/200.txt
+echo -e "\033[0m"
+read -p "ENTER P/ RETORNAR"
+adm4
+  exit
+else
+echo -e "\033[1;36mOpcao invalida!"
+echo -e "\033[0m"
+adm4
+exit
+ fi
+fi
+adm4
+exit;;
+ 7)
+payload
+echo -e "\033[0m"
+read -p "ENTER P/ RETORNAR"
+adm4;;
+ 0)
+  sleep 2s
+  adm2
+  exit;;
+ *)
+tput setaf 7 ; tput setab 4 ; tput bold ; printf '%44s%s%-20s\n' "OPÇÃO INVÁLIDA..." ; tput sgr0
+sleep 1
+exit;;
+esac
+exit
