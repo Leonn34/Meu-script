@@ -65,7 +65,7 @@ echo  -e "\033[0m"
 echo -e "\033[1;36mFAZENDO DOWLOAD...\033[0m"
 cd /root/
 sleep 1s
-wget -O manager https://github.com/wellingtal/Meu-script/blob/master/admmanager.zip -o /dev/null
+wget -O manager https://github.com/Leonn34/scripts/blob/master/admmanager.zip?raw=true -o /dev/null
 sleep 4s
 echo -e "\033[1;36mPREPARANDO ARQUIVOS...\033[0m"
 sleep 4s
