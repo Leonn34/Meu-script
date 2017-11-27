@@ -1,0 +1,10 @@
+### PROJETO PARA ATUALIZAR ARQUIVOS
+
+#!/bin/bash
+
+if diff arq arq1; then
+  echo "não houve mudanças"
+else
+  echo "houve mudanças, atualizando..."
+  mv arq1 arq
+fi
