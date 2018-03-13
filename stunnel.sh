@@ -62,5 +62,7 @@ sleep 2
 service stunnel4 restart
 service ssh restart
 clear
+service stunnel4 restart
 echo "STUNNEL ISTALADO COM SUCESSO!"
-sleep 4
+sleep 5
+clear
