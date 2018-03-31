@@ -17,6 +17,6 @@ service stunnel4 start
 echo "================ STUNNEL ATIVADO! ================"
 sleep 5
 else
-wget https://raw.githubusercontent.com/Leonn34/scripts/master/stunnel.sh && chmod+x stunnel.sh && ./stunnel.sh
+wget https://raw.githubusercontent.com/Leonn34/scripts/master/stunnel.sh && chmod +x stunnel.sh && ./stunnel.sh
 fi
 exit
