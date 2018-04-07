@@ -46,6 +46,11 @@ echo "REINICIANDO SERVIÇOS..."
 sleep 3
 echo "DROPBEAR CONFIGURADO!"
 sleep 5
+echo ""
+echo "ENTER para voltar"
+read -p " "
+sleep 1s
+menu
 ;;
 2)
 #desativando
@@ -71,6 +76,11 @@ sleep 3
 clear
 echo "DROPBEAR DESATIVADO!"
 sleep 5
+echo ""
+echo "ENTER para voltar"
+read -p " "
+sleep 1s
+menu
 ;;
 3)
 netstat -ntpl
@@ -87,4 +97,6 @@ exit
 *)
 echo "OPÇÃO INVÁLIDA!"
 sleep 3
+dropbear.sh
+exit
 esac
