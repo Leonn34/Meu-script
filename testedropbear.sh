@@ -25,6 +25,8 @@ cp /etc/default/dropbear /etc/default/dropbear.bkp
 fi
 echo "CONFIGUARNDO DROPBEAR..."
 sleep 3
+service dropbear stop
+sleep 5
 echo "#Dropbear" > /etc/default/dropbear
 echo "NO_START=0" >> /etc/default/dropbear
 echo "DROPBEAR_PORT=443" >> /etc/default/dropbear
@@ -33,7 +35,11 @@ echo 'DROPBEAR_EXTRA_ARGS="-p 80"' >> /etc/default/dropbear
 grep -v "^Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
 echo "#Port 443" >> /etc/ssh/sshd_config
 # REINICIANDO SERVIÇOS
-service squid3 stop && service ssh restart && service dropbear start && service dropbear restart
+service squid3 stop 
+service ssh restart
+service dropbear start
+service dropbear restart
+sleep 5
 echo "REINICIANDO SERVIÇOS..."
 sleep 3
 echo "DROPBEAR CONFIGURADO!"
