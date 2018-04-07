@@ -8,6 +8,14 @@ read -p "[1-2]" opcao
 case $opcao in
 1)
 #verificando o bkp
+if [ -e "/etc/default/dropbear" ] ; then
+echo ""
+else
+echo "Instalando Dropbear"
+sleep 3
+apt-get update && apt-get install dropbear -y
+fi
+
 if [ -e "/etc/default/dropbear.bkp" ] ; then
 echo ""
 else
