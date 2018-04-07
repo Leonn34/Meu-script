@@ -6,7 +6,9 @@ echo "[1] ATIVAR"
 echo "[2] DESATIVAR"
 echo "[3] VERIFICAR PORTAS UTILIZADAS"
 echo "[4] SAIR"
-read -p "[1-4]" opcao
+echo ""
+read -p " [1-4] " opcao
+echo " OPÇÃO ESCOLHIDA: " $opcao
 case $opcao in
 1)
 #verificando o bkp
