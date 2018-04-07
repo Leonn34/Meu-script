@@ -49,6 +49,7 @@ sleep 5
 #desativando
 clear
 echo "AGUARDE UM MOMENTO..."
+service dropbear stop
 sleep 3
 clear
 echo "DESATIVANDO DROPBEAR..."
@@ -59,7 +60,10 @@ mv /etc/default/dropbear.bkp /etc/default/dropbear
 grep -v "^#Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
 echo "Port 443" >> /etc/ssh/sshd_config
 # REINICIANDO SERVIÇOS
-service squid3 stop && service ssh restart && service dropbear stop
+service squid3 stop
+service ssh restart
+service dropbear stop
+sleep 5
 echo "REINICIANDO SERVIÇOS..."
 sleep 3
 clear
