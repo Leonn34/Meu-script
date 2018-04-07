@@ -4,11 +4,17 @@ echo "MENU DROPBEAR"
 echo ""
 echo "[1] ATIVAR"
 echo "[2] DESATIVAR"
-read -p opcao
+read -p "[1-2]" opcao
 case $opcao in
 1)
-#ativando
+#verificando o bkp
+if [ -e "/etc/default/dropbear.bkp" ] ; then
+echo ""
+else
+echo "Criando Backup..."
+sleep 3
 cp /etc/default/dropbear /etc/default/dropbear.bkp
+fi
 echo "CONFIGUARNDO DROPBEAR..."
 sleep 3
 echo "#Dropbear" > /etc/default/dropbear
