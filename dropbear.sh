@@ -4,7 +4,9 @@ echo "MENU DROPBEAR"
 echo ""
 echo "[1] ATIVAR"
 echo "[2] DESATIVAR"
-read -p "[1-2]" opcao
+echo "[3] VERIFICAR PORTAS UTILIZADAS"
+echo "[4] SAIR"
+read -p "[1-4]" opcao
 case $opcao in
 1)
 #verificando o bkp
@@ -69,6 +71,12 @@ sleep 3
 clear
 echo "DROPBEAR DESATIVADO!"
 sleep 5
+;;
+3)
+netstat -ntpl
+;;
+4)
+exit
 ;;
 *)
 echo "OPÇÃO INVÁLIDA!"
