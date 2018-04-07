@@ -74,6 +74,12 @@ sleep 5
 ;;
 3)
 netstat -ntpl
+#voltar ao menu opcional
+echo ""
+echo "ENTER para voltar"
+read -p " "
+sleep 1s
+menu
 ;;
 4)
 exit
