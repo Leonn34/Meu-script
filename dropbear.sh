@@ -4,10 +4,9 @@ echo "MENU DROPBEAR"
 echo ""
 echo "[1] ATIVAR"
 echo "[2] DESATIVAR"
-echo "[3] VERIFICAR PORTAS UTILIZADAS"
-echo "[4] SAIR"
+echo "[3] SAIR"
 echo ""
-read -p " [1-4] " opcao
+read -p " [1-3] " opcao
 echo " OPÇÃO ESCOLHIDA: " $opcao
 case $opcao in
 1)
@@ -82,18 +81,9 @@ echo ""
 echo "ENTER para voltar"
 read -p " "
 sleep 1s
-menu
+menu2
 ;;
 3)
-netstat -ntpl
-#voltar ao menu opcional
-echo ""
-echo "ENTER para voltar"
-read -p " "
-sleep 1s
-menu
-;;
-4)
 exit
 ;;
 *)
