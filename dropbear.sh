@@ -64,29 +64,29 @@ echo -e $amarelo" [1]"$fim $branco"ATIVAR"$fim
 echo -e $amarelo" [2]"$fim $branco"DESATIVAR"$fim
 echo -e $amarelo" [3]"$fim $branco"SAIR"$fim
 echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
-echo ""
 read -p " DIGITE SUA OPÇÃO: [1-3] " opcao
-echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 echo -e $cinzaClaro" OPÇÃO ESCOLHIDA:"$fim $branco$opcao$fim
+
 case $opcao in
+
 1)
 #verificando o bkp
 clear
 echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 if [ -e "/etc/default/dropbear" ] ; then
-echo -e $amarelo" CONFIGURANDO DROPBEAR..."$fim
+	echo -e $amarelo" CONFIGURANDO DROPBEAR..."$fim
 else
-echo -e $amarelo" INSTALANDO DROPBEAR"$fim
+	echo -e $amarelo" INSTALANDO DROPBEAR"$fim
 sleep 3
 apt-get update && apt-get install dropbear -y
 fi
 
 if [ -e "/etc/default/dropbear.bkp" ] ; then
-echo -e $amarelo" AGUARDE..."$fim
+	echo -e $amarelo" AGUARDE..."$fim
 else
-#echo "Criando Backup..."
+	#echo "Criando Backup..."
 sleep 3
-cp /etc/default/dropbear /etc/default/dropbear.bkp
+	cp /etc/default/dropbear /etc/default/dropbear.bkp
 fi
 echo -e $amarelo" CONFIGURANDO DROPBEAR AGUARDE..."$fim
 sleep 3
