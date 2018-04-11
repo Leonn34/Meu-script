@@ -78,7 +78,7 @@ echo -e $amarelo" CONFIGURANDO DROPBEAR..."$fim
 else
 echo -e $amarelo" INSTALANDO DROPBEAR"$fim
 sleep 3
-apt-get update && apt-get install dropbear -y > /dev/null
+apt-get update && apt-get install dropbear
 fi
 
 if [ -e "/etc/default/dropbear.bkp" ] ; then
@@ -86,24 +86,24 @@ echo -e $amarelo" AGUARDE..."$fim
 else
 #echo "Criando Backup..."
 sleep 3
-cp /etc/default/dropbear /etc/default/dropbear.bkp > /dev/null
+cp /etc/default/dropbear /etc/default/dropbear.bkp
 fi
 echo -e $amarelo" CONFIGURANDO DROPBEAR AGUARDE..."$fim
 sleep 3
-service dropbear stop > /dev/null
+service dropbear stop
 sleep 5
-echo "#Dropbear" > /etc/default/dropbear > /dev/null
-echo "NO_START=0" >> /etc/default/dropbear > /dev/null
-echo "DROPBEAR_PORT=443" >> /etc/default/dropbear > /dev/null
-echo 'DROPBEAR_EXTRA_ARGS="-p 80"' >> /etc/default/dropbear > /dev/null
+echo "#Dropbear" > /etc/default/dropbear
+echo "NO_START=0" >> /etc/default/dropbear
+echo "DROPBEAR_PORT=443" >> /etc/default/dropbear
+echo 'DROPBEAR_EXTRA_ARGS="-p 80"' >> /etc/default/dropbear
 # DESATIVANDO A PORTA 443 NO SSH
-grep -v "^Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config > /dev/null
-echo "#Port 443" >> /etc/ssh/sshd_config > /dev/null
+grep -v "^Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
+echo "#Port 443" >> /etc/ssh/sshd_config
 # REINICIANDO SERVIÇOS
-service squid3 stop > /dev/null
-service ssh restart > /dev/null
-service dropbear start > /dev/null
-service dropbear restart > /dev/null
+service squid3 stop
+service ssh restart
+service dropbear start
+service dropbear restart
 sleep 5
 echo -e $amarelo" REINICIANDO SERVIÇOS..."$fim
 sleep 3
@@ -120,21 +120,21 @@ menu
 clear
 echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 echo -e $amarelo" AGUARDE UM MOMENTO..."$fim
-service dropbear stop > /dev/null
+service dropbear stop
 sleep 3
 clear
 echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 echo -e $amarelo" DESATIVANDO DROPBEAR..."$fim
 sleep 3
 clear
-mv /etc/default/dropbear.bkp /etc/default/dropbear > /dev/null
+mv /etc/default/dropbear.bkp /etc/default/dropbear
 # ATIVANDO A PORTA 443 NO SSH
-grep -v "^#Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config > /dev/null
-echo "Port 443" >> /etc/ssh/sshd_config > /dev/null
+grep -v "^#Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
+echo "Port 443" >> /etc/ssh/sshd_config
 # REINICIANDO SERVIÇOS
-service squid3 stop > /dev/null
-service ssh restart > /dev/null
-service dropbear stop > /dev/null
+service squid3 stop
+service ssh restart
+service dropbear stop
 sleep 5
 clear
 echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
