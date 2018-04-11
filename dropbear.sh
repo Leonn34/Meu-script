@@ -63,89 +63,98 @@ echo ""
 echo -e $amarelo" [1]"$fim $branco"ATIVAR"$fim
 echo -e $amarelo" [2]"$fim $branco"DESATIVAR"$fim
 echo -e $amarelo" [3]"$fim $branco"SAIR"$fim
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 echo ""
-read -p " [1-3] " opcao
-echo " OPÇÃO ESCOLHIDA: " $opcao
+read -p " DIGITE SUA OPÇÃO: [1-3] " opcao
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
+echo -e $cinzaClaro" OPÇÃO ESCOLHIDA:"$fim $branco$opcao$fim
 case $opcao in
 1)
 #verificando o bkp
+clear
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 if [ -e "/etc/default/dropbear" ] ; then
-echo ""
+echo -e $amarelo" CONFIGURANDO DROPBEAR..."$fim
 else
-echo "Instalando Dropbear"
+echo -e $amarelo" INSTALANDO DROPBEAR"$fim
 sleep 3
-apt-get update && apt-get install dropbear -y
+apt-get update && apt-get install dropbear -y > /dev/null
 fi
 
 if [ -e "/etc/default/dropbear.bkp" ] ; then
-echo ""
+echo -e $amarelo" AGUARDE..."$fim
 else
-echo "Criando Backup..."
+#echo "Criando Backup..."
 sleep 3
-cp /etc/default/dropbear /etc/default/dropbear.bkp
+cp /etc/default/dropbear /etc/default/dropbear.bkp > /dev/null
 fi
-echo "CONFIGUARNDO DROPBEAR..."
+echo -e $amarelo" CONFIGURANDO DROPBEAR AGUARDE..."$fim
 sleep 3
-service dropbear stop
+service dropbear stop > /dev/null
 sleep 5
-echo "#Dropbear" > /etc/default/dropbear
-echo "NO_START=0" >> /etc/default/dropbear
-echo "DROPBEAR_PORT=443" >> /etc/default/dropbear
-echo 'DROPBEAR_EXTRA_ARGS="-p 80"' >> /etc/default/dropbear
+echo "#Dropbear" > /etc/default/dropbear > /dev/null
+echo "NO_START=0" >> /etc/default/dropbear > /dev/null
+echo "DROPBEAR_PORT=443" >> /etc/default/dropbear > /dev/null
+echo 'DROPBEAR_EXTRA_ARGS="-p 80"' >> /etc/default/dropbear > /dev/null
 # DESATIVANDO A PORTA 443 NO SSH
-grep -v "^Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
-echo "#Port 443" >> /etc/ssh/sshd_config
+grep -v "^Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config > /dev/null
+echo "#Port 443" >> /etc/ssh/sshd_config > /dev/null
 # REINICIANDO SERVIÇOS
-service squid3 stop 
-service ssh restart
-service dropbear start
-service dropbear restart
+service squid3 stop > /dev/null
+service ssh restart > /dev/null
+service dropbear start > /dev/null
+service dropbear restart > /dev/null
 sleep 5
-echo "REINICIANDO SERVIÇOS..."
+echo -e $amarelo" REINICIANDO SERVIÇOS..."$fim
 sleep 3
-echo "DROPBEAR CONFIGURADO!"
+echo -e $amarelo" DROPBEAR CONFIGURADO COM SUCESSO!"$fim
 sleep 5
 echo ""
-echo "ENTER para voltar"
+echo -e $verdeClaro"ENTER"$fim $branco"para voltar"$fim
 read -p " "
-sleep 1s
+sleep 1
 menu
 ;;
 2)
 #desativando
 clear
-echo "AGUARDE UM MOMENTO..."
-service dropbear stop
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
+echo -e $amarelo" AGUARDE UM MOMENTO..."$fim
+service dropbear stop > /dev/null
 sleep 3
 clear
-echo "DESATIVANDO DROPBEAR..."
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
+echo -e $amarelo" DESATIVANDO DROPBEAR..."$fim
 sleep 3
 clear
-mv /etc/default/dropbear.bkp /etc/default/dropbear
+mv /etc/default/dropbear.bkp /etc/default/dropbear > /dev/null
 # ATIVANDO A PORTA 443 NO SSH
-grep -v "^#Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config
-echo "Port 443" >> /etc/ssh/sshd_config
+grep -v "^#Port 443" /etc/ssh/sshd_config > /tmp/ssh && mv /tmp/ssh /etc/ssh/sshd_config > /dev/null
+echo "Port 443" >> /etc/ssh/sshd_config > /dev/null
 # REINICIANDO SERVIÇOS
-service squid3 stop
-service ssh restart
-service dropbear stop
+service squid3 stop > /dev/null
+service ssh restart > /dev/null
+service dropbear stop > /dev/null
 sleep 5
-echo "REINICIANDO SERVIÇOS..."
+clear
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
+echo -e $amarelo" REINICIANDO SERVIÇOS..."$fim
 sleep 3
 clear
-echo "DROPBEAR DESATIVADO!"
+echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
+echo -e $amarelo" DROPBEAR DESATIVADO!"$fim
 sleep 5
 echo ""
-echo "ENTER para voltar"
+echo -e $verdeClaro"ENTER"$fim $branco"para voltar"$fim
 read -p " "
-sleep 1s
+sleep 1
 menu2
 ;;
 3)
 exit
 ;;
 *)
-echo "OPÇÃO INVÁLIDA!"
+echo -e $amarelo" OPÇÃO INVÁLIDA!"$fim
 sleep 3
 dropbear.sh
 exit
