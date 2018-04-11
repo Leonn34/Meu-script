@@ -78,7 +78,7 @@ echo -e $amarelo" CONFIGURANDO DROPBEAR..."$fim
 else
 echo -e $amarelo" INSTALANDO DROPBEAR"$fim
 sleep 3
-apt-get update && apt-get install dropbear
+apt-get update && apt-get install dropbear -y
 fi
 
 if [ -e "/etc/default/dropbear.bkp" ] ; then
