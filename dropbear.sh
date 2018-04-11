@@ -62,7 +62,7 @@ echo -e $branco" MENU DROPBEAR"$fim
 echo ""
 echo -e $amarelo" [1]"$fim $branco"ATIVAR"$fim
 echo -e $amarelo" [2]"$fim $branco"DESATIVAR"$fim
-echo -e $amarelo" [3]"$fim $branco"SAIR"$fim
+echo -e $amarelo" [3]"$fim $branco"VOLTAR"$fim
 echo -e $verdeClaro"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="$fim
 read -p " DIGITE SUA OPÇÃO: [1-3] " opcao
 echo -e $cinzaClaro" OPÇÃO ESCOLHIDA:"$fim $branco$opcao$fim
@@ -151,7 +151,7 @@ sleep 1
 menu2
 ;;
 3)
-exit
+menu2
 ;;
 *)
 echo -e $amarelo" OPÇÃO INVÁLIDA!"$fim
