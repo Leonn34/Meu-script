@@ -503,6 +503,7 @@ user nobody
 group $NOGROUP
 persist-key
 persist-tun
+comp-lzo
 keepalive 10 120
 topology subnet
 server 10.8.0.0 255.255.255.0
