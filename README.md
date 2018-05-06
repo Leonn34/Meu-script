@@ -1,3 +1,2 @@
-# Meu-script
-Gerenciador-ssh
-TESTE
+# Scripts geralmente utilizados para testes
+
