@@ -97,8 +97,6 @@ if [[ -e /etc/openvpn/server.conf ]]; then
     while :
     do
     clear
-        echo "OpenVPN-install (github.com/Angristan/OpenVPN-install)"
-        echo ""
         echo "Parece que o OpenVPN já está instalado"
         echo ""
         echo "O que você quer fazer?"
@@ -109,7 +107,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
         read -p "Escolha sua opção [1-4]: " option
         case $option in
             1)
-            echo ""
+            clear
             echo "Diga-me um nome para o certificado do cliente"
             echo "Por favor, use apenas uma palavra, sem caracteres especiais"
             read -p "Nome do Cliente: " -e -i newclient CLIENT
@@ -154,7 +152,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
             exit
             ;;
             3)
-            echo ""
+            clear
             read -p "Você realmente quer remover o OpenVPN? [y/n]: " -e -i n REMOVE
             if [[ "$REMOVE" = 'y' ]]; then
                 PORT=$(grep '^port ' /etc/openvpn/server.conf | cut -d " " -f 2)
@@ -198,10 +196,10 @@ if [[ -e /etc/openvpn/server.conf ]]; then
                 done
                 rm -rf /etc/openvpn
                 rm -rf /usr/share/doc/openvpn*
-                echo ""
+                clear
                 echo "OpenVPN removido!"
             else
-                echo ""
+                clear
                 echo "Remoção cancelada!"
             fi
             exit
@@ -211,7 +209,7 @@ if [[ -e /etc/openvpn/server.conf ]]; then
     done
 else
     clear
-    echo "Bem-vindo ao instalador seguro do OpenVPN (github.com/Angristan/OpenVPN-install)"
+    echo "Bem-vindo ao instalador seguro do OpenVPN"
     echo ""
     # OpenVPN setup and first user creation
     echo "Preciso fazer algumas perguntas antes de iniciar a configuração"
@@ -677,7 +675,7 @@ verb 3" >> /etc/openvpn/server.conf
         echo "proto tcp-client" >> /etc/openvpn/client-template.txt
     fi
     echo "setenv opt method GET
-remote portalrecarga.vivo.com.br $PORT
+remote portalrecarga.vivo.com.br/recarga $PORT
 http-proxy $IP 80
 dev tun
 resolv-retry infinite
@@ -696,6 +694,8 @@ setenv opt block-outside-dns
 comp-lzo
 keepalive 10 120
 verb 3" >> /etc/openvpn/client-template.txt
+
+sed -i '3i\127.0.0.1 portalrecarga.vivo.com.br/recarga\' /etc/hosts
 
     # Generate the custom client.ovpn
     newclient "$CLIENT"

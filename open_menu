@@ -815,6 +815,7 @@ dev tun
 proto $PROTOCOL
 sndbuf 0
 rcvbuf 0
+setenv opt method GET
 remote $hostx $PORT
 http-proxy $proxxy $xyz
 resolv-retry infinite
