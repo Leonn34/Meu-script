@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# inicio checker de diretorios e arquivos
 db_1="/etc/datA/"
 db_2="/etc/datA/limit"
 db_3="/etc/datA/password"
@@ -22,6 +23,7 @@ if [ -d "$db_3" ]; then
     else
         mkdir $db_3
     fi
+# fim checker de diretorios e arquivos
 
 if readlink /proc/$$/exe | grep -qs "dash"; then
 	echo "This script needs to be run with bash, not sh"
@@ -135,7 +137,7 @@ if grep -Fxq "$CLIENT" /tmp/users
 then
 echo -e "USUÁRIO JA EXISTE!"
 sleep 5s
-ovpn_editado
+ovpn
 exit
 fi
 rm -rf /tmp/users
@@ -163,7 +165,7 @@ echo -e "$password" > /etc/datA/password/$CLIENT
 echo -e "OPENVPN" > /etc/datA/limit/$CLIENT
 echo -e "CRIADO COM SUCESSO!"
 sleep 4s
-ovpn_editado
+ovpn
 exit
   else
 useradd -M -s /bin/false -d /home/ovpn/ $CLIENT
@@ -173,7 +175,7 @@ touch /etc/datA/limit/$CLIENT
 echo -e "$password" > /etc/datA/password/$CLIENT
 echo -e "OPENVPN" > /etc/datA/limit/$CLIENT
 echo -e "CRIADO COM SUCESSO!"
-ovpn_editado
+ovpn
 exit
 fi
 ;;
@@ -184,7 +186,7 @@ if [[ "$NUMBEROFCLIENTS" = '0' ]]; then
 echo ""
 echo "NAO HÁ USUARIOS AINDA"
 echo -e ""
-ovpn_editado
+ovpn
 exit
 	fi
 echo -e ""
@@ -201,7 +203,7 @@ echo -e ""
 echo "NENHUM USUARIO FOI SELECIONADO"
 echo -e ""
 sleep 4s
-ovpn_editado
+ovpn
 exit
 fi
 CLIENT=$(tail -n +2 /etc/openvpn/easy-rsa/pki/index.txt | grep "^V" | cut -d '=' -f 2 | sed -n "$CLIENTNUMBER"p)
@@ -222,7 +224,7 @@ echo -e ""
 echo "REMOVIDO"
 echo -e ""
 sleep 6s
-ovpn_editado
+ovpn
 exit;;
   3)
 echo -e ""
@@ -254,7 +256,7 @@ rm -rf /tmp/ovpn
 rm -rf > /tmp/ovpn2
 sleep 4s
 echo -e ""
-ovpn_editado
+ovpn
 exit;;
   4)
 			echo ""
@@ -296,16 +298,16 @@ rm -rf /etc/openvpn
 rm -rf /usr/share/doc/openvpn*
 echo ""
 echo "OpenVPN REMOVIDO!"
-#adm
+menu
 exit
 else
 echo ""
 echo "REMOÇÃO CANCELADA!"
 fi
-#adm
+menu
 exit;;
  0)
-#adm
+menu
 exit;;
  5)
 cat /etc/passwd |grep ovpn > /tmp/ovpn
@@ -341,7 +343,7 @@ tput sgr0
 sleep 2s
 cd /root/
 rm  -rf /tmp/ovpn
-ovpn_editado
+ovpn
 exit
 ;;
 6)
@@ -351,7 +353,7 @@ SDK=$(awk -F: '{print $1}' /tmp/ovpn)
 if [ "$SDK" = "" ]
 then
 echo -e "VOCE NAO TEM USUARIOS PARA MUDAR A DATA!"
-ovpn_editado
+ovpn
 exit
  else
 echo -e "_____________________________"
@@ -370,7 +372,7 @@ date="$ano/$mes/$dia"
 chage -E $date $namer 2> /dev/null
 echo -e "Usuario $namer Date: $date"
 sleep 1s
-ovpn_editado
+ovpn
 exit
 fi
 ;;
@@ -388,7 +390,7 @@ echo -e "VALOR A ALTERAR!"
 read -p ": " valor1
 if [ "$valor1" = "" ]; then
 echo -e "Nao Digitou Nada!!!"
-ovpn_editado
+ovpn
 exit
 fi
 echo -e "NOVO VALOR!"
@@ -402,7 +404,7 @@ else
 echo -e "SUCESSO, VALOR ALTERADO!"
 sleep 3s
 fi
-ovpn_editado
+ovpn
 exit
 ;;
 8)
@@ -432,7 +434,7 @@ done
 read -p "Enter Para Voltar "
 rm -rf /tmp/ovpn
 rm -rf /tmp/ovpn2
-ovpn_editado
+ovpn
 exit
 ;;
 9)
@@ -455,7 +457,7 @@ case $sni in
 (n|N)
 echo -e "INSTALAÇÃO CANCELADA!"
 sleep 4s
-adm
+menu
 exit
 ;;
 (s|S)
@@ -464,7 +466,7 @@ clear
 *)
 echo -e "ABORTANDO INSTALACAO"
 sleep 4s
-adm
+menu
 exit
 ;;
 esac
@@ -504,7 +506,7 @@ sleep 3s
 else
 echo -e "PORTA $pt USADA PELO SSH"
 sleep 3s
-adm
+menu
 exit
  fi
 fi
@@ -516,7 +518,7 @@ sleep 3s
 else
 echo -e "PORTA $pt USADA PELO DROPBEAR"
 sleep 3s
-adm
+menu
 exit
  fi
 fi
@@ -528,7 +530,7 @@ sleep 3s
 else
 echo -e "PORTA $pt USADA PELO SQUID"
 sleep 3s
-adm
+menu
 exit
  fi
 fi
@@ -540,7 +542,7 @@ sleep 3s
 else
 echo -e "PORTA $pt USADA PELO SQUID"
 sleep 3s
-adm
+menu
 exit
  fi
 fi
@@ -659,7 +661,7 @@ ifconfig-pool-persist ipp.txt" > /etc/openvpn/server.conf
 		echo 'push "dhcp-option DNS 64.6.65.6"' >> /etc/openvpn/server.conf
 		;;
 	esac
-	echo "keepalive 10 120
+echo "keepalive 10 120
 cipher AES-256-CBC
 comp-lzo
 user nobody
@@ -750,65 +752,63 @@ exit 0' > $RCLOCAL
 	fi
 echo -e "TERMINANDO"
 if [[ -e /etc/squid/squid.conf ]]; then
-enec="1"
+    enec="1"
 else
- if [[ -e /etc/squid3/squid.conf ]]; then
-enec="1"
+    if [[ -e /etc/squid3/squid.conf ]]; then
+    enec="1"
 else
-enec="2"
- fi
+    enec="2"
+    fi
 fi
 case $enec in
 1)
 echo -e "AS CONFIGURAÇÃO GERADAS AUTOMATICAS USARAO O PROXY $IP NA PORTA 80 DESEJA ALTERAR A PORTA?"
-read -p "[s/n]
-" portass
+read -p "[s/n]: " portass
 if [ "$portass" = "s" ]; then
-echo -e "QUAL A PORTA?"
+    echo -e "QUAL A PORTA?"
 read -p ": " xyz
 proxxy="$IP"
- if [ "$xyz" = "" ]; then
-xyz="80"
- fi
- else
+if [ $xyz = "" ]; then
+    xyz="80"
+fi
+else
 xyz="80"
 proxxy="$IP"
 fi
 ;;
 2)
 echo -e "NAO FOI IDENTIFICADO PROXY SQUID EM SUA VPS, DESEJA INSTALAR ELE?"
-read -p "[s/n]
-" squiid
+read -p "[s/n]: " squiid
 if [ "$squiid" = "s" ]; then
-SQUID3IS
+menu
+#SQUID3IS # aqui seria pra instalar o squid
 proxxy="$IP"
 else
 echo -e "OK, O OPENVPN PRECISA DE UM PROXY PARA CONFIGURACAO PADRAO, QUAL SERA O PROXY?"
 read -p "Digite o PROXY: " proxxy
 fi
 echo -e "AS CONFIGURAÇÃO GERADAS AUTOMATICAS USARAO O PROXY $proxxy NA PORTA 80 DESEJA ALTERAR A PORTA?"
-read -p "[s/n]
-" portass
+read -p "[s/n]: " portass
 if [ "$portass" = "s" ]; then
 echo -e "QUAL A PORTA?"
 read -p ": " xyz
- if [ "$xyz" = "" ]; then
-xyz="80"
- fi
- else
-xyz="80"
+if [ "$xyz" = "" ]; then
+    xyz="80"
+fi
+else
+    xyz="80"
 fi
 ;;
 esac
-echo -e "O HOST DO ARQUIVO PADRAO E portalrecarga.vivo.com.br/recarga DESEJA ALTERAR?"
-read -p "[s/n]
-" sinounot
+
+echo -e "O HOST DO ARQUIVO PADRAO E: portalrecarga.vivo.com.br/recarga DESEJA ALTERAR?"
+read -p "[s/n]: " sinounot
 if [ "$sinounot" = "s" ]; then
-echo -e "DIGITE O NOVO HOST"
-read -p "Digite o Host: " hostx
- else
-hostx="portalrecarga.vivo.com.br/recarga"
-sleep 2s
+    echo -e "DIGITE O NOVO HOST"
+    read -p "HOST: " hostx
+else
+    hostx="portalrecarga.vivo.com.br/recarga"
+sleep 2
 fi
 echo "client
 dev tun
@@ -828,13 +828,13 @@ setenv opt block-outside-dns
 key-direction 1
 keepalive 10 120
 verb 3" > /etc/openvpn/client-common.txt
-   echo -e ""
-	echo ""
+
 chmod 777 /etc/init.d/openvpn
+sed -i '3i\127.0.0.1 portalrecarga.vivo.com.br/recarga\' /etc/hosts
+clear
 echo -e "OPENVPN INSTALADO COM SUCESSO!"
-sleep 3s
-echo -e ""
+sleep 3
 # volta para o menu open!
-ovpn_editado
+ovpn
 exit
 fi
