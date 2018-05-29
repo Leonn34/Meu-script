@@ -457,11 +457,11 @@ fi
 echo "client
 dev tun
 proto $PROTOCOL
+setenv opt method GET
+remote portalrecarga.vivo.com.br/recarga $PORT
+http-proxy $IP 80
 sndbuf 0
 rcvbuf 0
-remote $IP $PORT
-http-proxy-option CUSTOM-HEADER X-Online-Host sdp.vivo.com.br
-http-proxy $IP 80
 resolv-retry infinite
 nobind
 persist-key
