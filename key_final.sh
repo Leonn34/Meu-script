@@ -8,8 +8,8 @@ fi
 #VERIFICAR ROOT
 if [[ "$EUID" -ne 0 ]]; then
 clear
-echo -e "DESCULPE, VOCE PRECISA\nSER UM USUARIO ROOT\nPARA RODAR O SCRIPT\n"
-exit 0
+	echo -e "DESCULPE, VOCE PRECISA\nSER UM USUARIO ROOT\nPARA RODAR O SCRIPT\n"
+	exit 0
 fi
 #VERIFICAR PASTA E ARQUIVO
 if [ ! -d "/etc/KEY_SERVER" ]; then
@@ -19,13 +19,15 @@ if [ -e "/etc/KEY_SERVER/KEY_FILE" ]; then
   rm /etc/KEY_SERVER/KEY_FILE 2>/dev/null
 fi
 #RECEBER KEY
-read -p "INSIRA SUA KEY: " KEY 
+echo -n "INSIRA SUA KEY: "
+# PARAMETRO "-s" OCULTA A KEY
+read -s KEY
 if [ -z $KEY ]; then
 clear
 echo -e "A KEY NAO FOI INSERIDA"
 exit 0
 fi
-KEY_DOWN=$(wget -O /etc/KEY_SERVER/KEY_FILE  https://raw.githubusercontent.com/Leonn34/scripts/master/KEY_FILE 1>/dev/null 2>/dev/null)
+KEY_DOWN=$(wget -O /etc/KEY_SERVER/KEY_FILE  https://raw.githubusercontent.com/Leonn34/scripts/master/_KEY_ 1>/dev/null 2>/dev/null)
 echo "$KEY_DOWN"
 KEY_VER=$( cat /etc/KEY_SERVER/KEY_FILE )
 if [ "$KEY" == "$KEY_VER" ]; then
